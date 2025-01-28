@@ -2,7 +2,6 @@
 <html>
 <head>
     <style>
-        /* Previous styles remain the same */
         .keyboard {
             max-width: 800px;
             margin: 20px auto;
@@ -77,7 +76,6 @@
     </style>
 </head>
 <body>
-    <!-- Previous keyboard HTML remains the same -->
     <div id="keyboardPage" class="keyboard">
         <textarea id="nameInput" class="input-field" placeholder="Enter name here..."></textarea>
         
@@ -6125,10 +6123,8 @@
         });
 
         function processName(name) {
-            // Count occurrences of each letter
 
-            // Change sofit letters, caf mem nun tzadi pe 
-
+            // Change sofit letters
             name = name.replace("ם", "מ").replace("ן", "נ").replace("ך", "כ").replace("ץ", "צ").replace("ף", "פ")
             
             const letterCounts = {};
