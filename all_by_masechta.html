@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mishnayot by Masechta</title>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="test_mish.html">Search by Name</a></li>
+                <li><a href="all_by_letter.html">Mishnayot by Letter</a></li>
+                <li><a href="all_by_masechta.html">Mishnayot by Masechta</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+    <script>
+        const tractateGroups = {
+        'Zeraim': ['Berakhot', 'Peah', 'Demai', 'Kilayim', 'Sheviit', 'Terumot', 'Maaserot', 'Maaser Sheni', 'Challah', 'Orlah', 'Bikurim'],
+        'Moed': ['Shabbat', 'Eruvin', 'Pesachim', 'Shekalim', 'Yoma', 'Sukkah', 'Beitzah', 'Rosh Hashanah', 'Taanit', 'Megillah', 'Moed Katan', 'Chagigah'],
+        'Nashim': ['Yevamot', 'Ketubot', 'Nedarim', 'Nazir', 'Sotah', 'Gittin', 'Kidushin'],
+        'Nezikin': ['Bava Kamma', 'Bava Metzia', 'Bava Batra', 'Sanhedrin', 'Makkot', 'Shevuot', 'Eduyot', 'Avodah Zarah', 'Avot', 'Horyot'],
+        'Kodshim': ['Zevachim', 'Menachot', 'Chullin', 'Bechorot', 'Erchin', 'Temurah', 'Keritot', 'Meilah', 'Tamid', 'Middot', 'Kinnim'],
+        'Taharot': ['Kelim', 'Ohalot', 'Negaim', 'Parah', 'Taharot', 'Mikvaot', 'Niddah', 'Makhshirin', 'Zavim', 'Tevul Yom', 'Yadayim', 'Uktzin']
+        };
+
+        for (const groupName in tractateGroups) {
+        const group = document.createElement('div');
+        group.classList.add('group');
+
+        const title = document.createElement('div');
+        title.classList.add('group-title');
+        title.textContent = groupName;
+        group.appendChild(title);
+
+        const list = document.createElement('ul');
+        list.classList.add('tractate-list');
+
+        tractateGroups[groupName].forEach(tractate => {
+            const item = document.createElement('li');
+            item.classList.add('tractate-item');
+            item.textContent = tractate;
+            item.addEventListener('click', () => {
+            // Remove 'selected' class from all items
+            const allItems = document.querySelectorAll('.tractate-item');
+            allItems.forEach(el => el.classList.remove('selected'));
+
+            // Add 'selected' class to the clicked item
+            item.classList.add('selected');
+
+            // Call JSON search function (replace with your actual function)
+            jsonSearch(tractate);
+            });
+            list.appendChild(item);
+        });
+        group.appendChild(list);
+        document.querySelector('.container').appendChild(group);
+        }
+
+        function jsonSearch(tractateName) {
+  fetch("./mish_db.json")
+    .then((res) => { // ... (fetch handling remains the same)
+    })
+    .then((data) => {
+      const results = [];
+
+      // Iterate through each letter (key) in the JSON data
+      for (const letter in data) {
+        if (data.hasOwnProperty(letter)) {  // Important: Check for own properties
+          const letterData = data[letter];
+
+          // Check if the tractate exists under this letter
+          if (letterData.hasOwnProperty(tractateName)) {
+            // If found, add the mishnayot to the results array
+            results.push(...letterData[tractateName]); // Use spread syntax (...) to add array elements
+          }
+        }
+      }
+
+      displayResults(results); // Display the results (same as before)
+    })
+    .catch((error) => console.error("Error fetching or processing data:", error));
+}
+
+
+function displayResults(results) {
+    const resultsDiv = document.getElementById('results'); // Make sure you have a <div id="results"> in your HTML
+    resultsDiv.innerHTML = ''; // Clear previous results
+
+    if (results.length === 0) {
+        resultsDiv.textContent = "No results found.";
+        return;
+    }
+
+    const ul = document.createElement('ul');
+    results.forEach(mishna => {
+        const li = document.createElement('li');
+        li.textContent = mishna; //  Display the mishna text (e.g., "2:1")
+        ul.appendChild(li);
+    });
+    resultsDiv.appendChild(ul);
+}
+
+       
+    </script>
+    </div>
+
+</body>
+</html>
