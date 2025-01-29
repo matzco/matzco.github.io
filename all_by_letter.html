@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<head>
+    <title>All Mishnayot by Letter</title>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="test_mish.html">Search by Name</a></li>
+                <li><a href="all_by_masechta.html">Mishnayot by Masechta</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="keyboardPage" class="keyboard">
+        
+        <div class="keyboard-row">
+            <span class="key">ק</span>
+            <span class="key">ר</span>
+            <span class="key">א</span>
+            <span class="key">ט</span>
+            <span class="key">ו</span>
+            <span class="key">ן</span>
+            <span class="key">ם</span>
+            <span class="key">פ</span>
+        </div>
+        <div class="keyboard-row">
+            <span class="key">ש</span>
+            <span class="key">ד</span>
+            <span class="key">ג</span>
+            <span class="key">כ</span>
+            <span class="key">ע</span>
+            <span class="key">י</span>
+            <span class="key">ח</span>
+            <span class="key">ל</span>
+            <span class="key">ך</span>
+            <span class="key">ף</span>
+        </div>
+        <div class="keyboard-row">
+            <span class="key">ז</span>
+            <span class="key">ס</span>
+            <span class="key">ב</span>
+            <span class="key">ה</span>
+            <span class="key">נ</span>
+            <span class="key">מ</span>
+            <span class="key">צ</span>
+            <span class="key">ת</span>
+            <span class="key">ץ</span>
+        </div>
+        
+    </div>
+
+    <script>
+        function fetch_data() {
+            fetch("./mish_db.json")
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! Status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    // Store JSON data
+                    window.mishData = data;
+                    console.log('mish_db loaded');
+                    setupKeyboardHandlers();
+                })
+                .catch((error) => console.error("Unable to fetch data:", error));
+        }
+
+        function setupKeyboardHandlers() {
+            // Add click handlers to all keyboard keys
+            document.querySelectorAll('.key').forEach(key => {
+                key.addEventListener('click', () => showResults(key.textContent));
+            });
+        }
+
+        function showResults(letter) {
+            // Remove existing results if any
+            const existingResults = document.querySelector('#results');
+            if (existingResults) existingResults.remove();
+
+            // Create results container
+            const results = document.createElement('div');
+            results.id = 'results';
+
+            // Get data for selected letter
+            const letterData = window.mishData[letter];
+            if (!letterData) return;
+
+            // Create entries for each tractate
+            for (const [tractate, references] of Object.entries(letterData)) {
+                const tractateDiv = document.createElement('div');
+                tractateDiv.className = 'tractate';
+                
+                const title = document.createElement('h3');
+                title.textContent = tractate;
+                tractateDiv.appendChild(title);
+
+                const refList = document.createElement('div');
+                refList.className = 'references';
+                references.forEach(ref => {
+                    const refSpan = document.createElement('span');
+                    refSpan.textContent = ref;
+                    refList.appendChild(refSpan);
+                });
+
+                tractateDiv.appendChild(refList);
+                results.appendChild(tractateDiv);
+            }
+
+            // Add results after keyboard
+            document.querySelector('#keyboardPage').after(results);
+        }
+
+        fetch_data();
+    </script>
+
+
+
+</body>
