@@ -1,81 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        .keyboard {
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: center;
-        }
-        .keyboard-row {
-            margin: 5px 0;
-        }
-        .key {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            margin: 2px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            user-select: none;
-            background: #fff;
-            font-size: 18px;
-        }
-        .key:hover {
-            background: #f0f0f0;
-        }
-        .key:active {
-            background: #e0e0e0;
-        }
-        .input-field {
-            width: 100%;
-            max-width: 400px;
-            padding: 10px;
-            margin: 20px auto;
-            display: block;
-            font-size: 18px;
-            direction: rtl;
-            min-height: 50px;
-        }
-        .special-key {
-            width: 80px !important;
-        }
-        #resultPage {
-            display: none;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .letter-result {
-            margin: 15px 0;
-            padding: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            background: #f9f9f9;
-        }
-        .letter-label {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            text-align: right;
-        }
-        .reference {
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        .tractate {
-            color: #34495e;
-            font-weight: bold;
-        }
-        .multiple-refs {
-            margin-left: 20px;
-        }
-    </style>
+    
 </head>
 <body>
+    <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="all_by_letter.html">Mishnayot by Letter</a></li>
+        <li><a href="all_by_masechta.html">Mishnayot by Masechta</a></li>
+      </ul>
+    </nav>
+  </header>
     <div id="keyboardPage" class="keyboard">
         <textarea id="nameInput" class="input-field" placeholder="Enter name here..."></textarea>
         
