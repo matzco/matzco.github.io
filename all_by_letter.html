@@ -9,7 +9,7 @@
     <header>
         <nav>
             <ul class="nav-links">
-                <li><a href="test_mish.html">Search by Name</a></li>
+                <li><a href="index.html">Search by Name</a></li>
                 <li><a href="all_by_masechta.html">Mishnayot by Masechta</a></li>
             </ul>
         </nav>
@@ -54,68 +54,91 @@
     </div>
 
     <script>
+        // Function to fetch and load JSON data from local file
         function fetch_data() {
-            fetch("./mish_db.json")
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! Status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    // Store JSON data
-                    window.mishData = data;
-                    console.log('mish_db loaded');
-                    setupKeyboardHandlers();
-                })
-                .catch((error) => console.error("Unable to fetch data:", error));
+        fetch("./mish_db.json")
+            .then((res) => {
+                // Check if fetch was successful
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then((data) => {
+                // Store JSON data globally for access across functions
+                window.mishData = data;
+                console.log('mish_db loaded');
+                setupKeyboardHandlers();
+            })
+            // Log any errors that occur during fetch
+            .catch((error) => console.error("Unable to fetch data:", error));
         }
 
+        // Add click event listeners to all keyboard keys
         function setupKeyboardHandlers() {
-            // Add click handlers to all keyboard keys
-            document.querySelectorAll('.key').forEach(key => {
-                key.addEventListener('click', () => showResults(key.textContent));
-            });
-        }
-
-        function showResults(letter) {
-            // Remove existing results if any
-            const existingResults = document.querySelector('#results');
-            if (existingResults) existingResults.remove();
-
-            // Create results container
-            const results = document.createElement('div');
-            results.id = 'results';
-
-            // Get data for selected letter
-            const letterData = window.mishData[letter];
-            if (!letterData) return;
-
-            // Create entries for each tractate
-            for (const [tractate, references] of Object.entries(letterData)) {
-                const tractateDiv = document.createElement('div');
-                tractateDiv.className = 'tractate';
-                
-                const title = document.createElement('h3');
-                title.textContent = tractate;
-                tractateDiv.appendChild(title);
-
-                const refList = document.createElement('div');
-                refList.className = 'references';
-                references.forEach(ref => {
-                    const refSpan = document.createElement('span');
-                    refSpan.textContent = ref;
-                    refList.appendChild(refSpan);
+        // Select all elements with 'key' class
+        document.querySelectorAll('.key').forEach(key => {
+            // Add click handler to each key
+            key.addEventListener('click', () => {
+                // Remove highlight from all keys
+                document.querySelectorAll('.key').forEach(k => {
+                    k.classList.remove('selected');
                 });
-
-                tractateDiv.appendChild(refList);
-                results.appendChild(tractateDiv);
-            }
-
-            // Add results after keyboard
-            document.querySelector('#keyboardPage').after(results);
+                // Add highlight to clicked key
+                key.classList.add('selected');
+                // Show results for clicked letter
+                showResults(key.textContent);
+            });
+        });
         }
 
+        // Display mishnah references for selected letter
+        function showResults(letter) {
+        // Remove previous results if they exist
+        const existingResults = document.querySelector('#results');
+        if (existingResults) existingResults.remove();
+
+        // Create container for new results
+        const results = document.createElement('div');
+        results.id = 'results';
+
+        // Get data for selected letter from JSON
+        const letterData = window.mishData[letter];
+        if (!letterData) return;
+
+        // Loop through each tractate for this letter
+        for (const [tractate, references] of Object.entries(letterData)) {
+            // Create container for tractate section
+            const tractateDiv = document.createElement('div');
+            tractateDiv.className = 'tractate';
+            
+            // Add tractate name as header
+            const title = document.createElement('h3');
+            title.textContent = tractate;
+            tractateDiv.appendChild(title);
+
+            // Create container for reference spans
+            const refList = document.createElement('div');
+            refList.className = 'references';
+            
+            // Add each reference as a span
+            references.forEach(ref => {
+                const refSpan = document.createElement('span');
+                refSpan.textContent = ref;
+                refList.appendChild(refSpan);
+            });
+
+            // Add references to tractate div
+            tractateDiv.appendChild(refList);
+            // Add tractate section to results
+            results.appendChild(tractateDiv);
+        }
+
+        // Insert results after keyboard
+        document.querySelector('#keyboardPage').after(results);
+        }
+
+        // Load data when page loads
         fetch_data();
     </script>
 
