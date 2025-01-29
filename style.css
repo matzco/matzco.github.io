@@ -122,3 +122,8 @@ nav ul.nav-links li a:hover {
     padding: 5px 10px;
     border-radius: 4px;
 }
+
+.key.selected {
+    background-color: #007BFF;
+    color: white;
+}
