@@ -81,7 +81,7 @@ nav ul.nav-links li a:hover {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
-    color: #2c3e50;
+    color: #007BFF;
 }
 .reference-list {
     list-style: none;
@@ -127,3 +127,40 @@ nav ul.nav-links li a:hover {
     background-color: #007BFF;
     color: white;
 }
+
+/*New*/
+
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to avoid horizontal scrollbar */
+    justify-content: space-around; /* Distributes space evenly */
+    padding: 20px;
+  }
+  .group {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px; /* Space between groups */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    flex: 1 0 200px; /* Adjust minimum width as needed */
+    min-width: 200px; /* Ensure a minimum width for content */
+  }
+  .group-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+  .tractate-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tractate-item {
+    padding: 5px;
+    cursor: pointer;
+  }
+  .tractate-item:hover {
+    background-color: #f0f0f0; /* Highlight on hover */
+  }
+  .tractate-item.selected {
+    background-color: lightblue; /* Highlight selected item */
+  }
