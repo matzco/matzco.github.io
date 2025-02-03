@@ -27,104 +27,107 @@
         'Taharot': ['Kelim', 'Oholot', 'Negaim', 'Parah', 'Tahorot', 'Mikvaot', 'Niddah', 'Makhshirin', 'Zavim', 'Tevul Yom', 'Yadayim', 'Oktzin']
         };
 
-        for (const groupName in tractateGroups) {
-        const group = document.createElement('div');
-        group.classList.add('group');
-
-        const title = document.createElement('div');
-        title.classList.add('group-title');
-        title.textContent = groupName;
-        group.appendChild(title);
-
-        const list = document.createElement('ul');
-        list.classList.add('tractate-list');
-
-        tractateGroups[groupName].forEach(tractate => {
-            const item = document.createElement('li');
-            item.classList.add('tractate-item');
-            item.textContent = tractate;
-            item.addEventListener('click', () => {
-            // Remove 'selected' class from all items
-            const allItems = document.querySelectorAll('.tractate-item');
-            allItems.forEach(el => el.classList.remove('selected'));
-
-            // Add 'selected' class to the clicked item
-            item.classList.add('selected');
-
-            // Call JSON search function (replace with your actual function)
-            jsonSearch(tractate);
-            });
-            list.appendChild(item);
-        });
-        group.appendChild(list);
-        document.querySelector('.container').appendChild(group);
-        }
-        function fetch_data() {
-            fetch("./mish_db.json")
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! Status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    window.mishData = data;
-                    console.log('mish_db loaded');
-                    setupKeyboardHandlers();
-                })
-                .catch((error) => console.error("Unable to fetch data:", error));
-        }
-
-        function setupKeyboardHandlers() {
-            document.querySelectorAll('.key').forEach(key => {
-                key.addEventListener('click', () => {
-                    document.querySelectorAll('.key').forEach(k => {
-                        k.classList.remove('selected');
+                 for (const groupName in tractateGroups) {
+                const group = document.createElement('div');
+                group.classList.add('group');
+                const title = document.createElement('div');
+                title.classList.add('group-title');
+                title.textContent = groupName;
+                group.appendChild(title);
+                const list = document.createElement('ul');
+                list.classList.add('tractate-list');
+                tractateGroups[groupName].forEach(tractate => {
+                    const item = document.createElement('li');
+                    item.classList.add('tractate-item');
+                    item.textContent = tractate;
+                    item.addEventListener('click', () => {
+                        const allItems = document.querySelectorAll('.tractate-item');
+                        allItems.forEach(el => el.classList.remove('selected'));
+                        item.classList.add('selected');
+                        showResultsForTractate(tractate);
                     });
-                    key.classList.add('selected');
-                    showResults(key.textContent);
+                    list.appendChild(item);
                 });
-            });
-        }
+                group.appendChild(list);
+                document.querySelector('.container').appendChild(group);
+            }
+            function fetch_data() {
+                fetch("/mish_db.json") // Corrected path!
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! Status: ${res.status}`);
+                        }
+                        return res.json();
+                    })
+                    .then((data) => {
+                        window.mishData = data;
+                        console.log('mish_db loaded');
+                        setupKeyboardHandlers();
+                    })
+                    .catch((error) => console.error("Unable to fetch data:", error));
+            }
+            function setupKeyboardHandlers() {
+                document.querySelectorAll('.key').forEach(key => {
+                    key.addEventListener('click', () => {
+                        document.querySelectorAll('.key').forEach(k => {
+                            k.classList.remove('selected');
+                        });
+                        key.classList.add('selected');
+                        showResults(key.textContent);
+                    });
+                });
+            }
 
-        function showResults(letter) {
-            const results = [];
+            function showResults(letter) {
+                const results = [];
 
-            if (window.mishData && window.mishData.hasOwnProperty(letter)) {
-                const letterData = window.mishData[letter];
+                if (window.mishData && window.mishData.hasOwnProperty(letter)) {
+                    const letterData = window.mishData[letter];
 
-                for (const tractateName in letterData) {
-                    if (letterData.hasOwnProperty(tractateName)) {
-                        results.push( ...letterData[tractateName].map(mishna => ({tractate: tractateName, mishna: mishna})));
+                    for (const tractateName in letterData) {
+                        if (letterData.hasOwnProperty(tractateName)) {
+                            results.push(...letterData[tractateName].map(mishna => ({ tractate: tractateName, mishna: mishna })));
+                        }
                     }
                 }
+                displayResults(results);
             }
 
+            function showResultsForTractate(tractateName) {
+                const results = [];
+                if (window.mishData) {
+                    for (const letter in window.mishData) {
+                        const letterData = window.mishData[letter];
+                        if (letterData.hasOwnProperty(tractateName)) {
+                            results.push(...letterData[tractateName].map(mishna => ({ tractate: tractateName, mishna: mishna })));
+                        }
+                    }
+                }
 
-            displayResults(results);
-        }
-
-
-        function displayResults(results) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-
-            if (results.length === 0) {
-                resultsDiv.textContent = "No results found.";
-                return;
+                displayResults(results);
             }
 
-            const ul = document.createElement('ul');
-            results.forEach(result => {
-                const li = document.createElement('li');
-                li.textContent = `${result.tractate} - ${result.mishna}`; 
-                ul.appendChild(li);
-            });
-            resultsDiv.appendChild(ul);
-        }
+            function displayResults(results) {
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
 
-    </script>
+                if (results.length === 0) {
+                    resultsDiv.textContent = "No results found.";
+                    return;
+                }
+
+                const ul = document.createElement('ul');
+                results.forEach(result => {
+                    const li = document.createElement('li');
+                    li.textContent = `${result.tractate} - ${result.mishna}`;
+                    ul.appendChild(li);
+                });
+                resultsDiv.appendChild(ul);
+            }
+
+            fetch_data(); 
+        </script>
+        <div id="results"></div>
     </div>
 
 </body>
-</html>
