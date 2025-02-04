@@ -18,116 +18,150 @@
 
     <div class="container">
     <script>
+        // Define the structure of the Mishnayot by grouping them into Seder (categories)
         const tractateGroups = {
-        'Zeraim': ['Berakhot', 'Peah', 'Demai', 'Kilayim', 'Sheviit', 'Terumot', 'Maasrot', 'Maaser Sheni', 'Challah', 'Orlah', 'Bikkurim'],
-        'Moed': ['Shabbat', 'Eruvin', 'Pesachim', 'Shekalim', 'Yoma', 'Sukkah', 'Beitzah', 'Rosh Hashanah', 'Taanit', 'Megillah', 'Moed Katan', 'Chagigah'],
-        'Nashim': ['Yevamot', 'Ketubot', 'Nedarim', 'Nazir', 'Sotah', 'Gittin', 'Kiddushin'],
-        'Nezikin': ['Bava Kamma', 'Bava Metzia', 'Bava Batra', 'Sanhedrin', 'Makkot', 'Shevuot', 'Eduyot', 'Avodah Zarah', 'Pirkei Avot', 'Horayot'],
-        'Kodshim': ['Zevachim', 'Menachot', 'Chullin', 'Bekhorot', 'Arakhin', 'Temurah', 'Keritot', 'Meilah', 'Tamid', 'Middot', 'Kinnim'],
-        'Taharot': ['Kelim', 'Oholot', 'Negaim', 'Parah', 'Tahorot', 'Mikvaot', 'Niddah', 'Makhshirin', 'Zavim', 'Tevul Yom', 'Yadayim', 'Oktzin']
+            'Zeraim': ['Berakhot', 'Peah', 'Demai', 'Kilayim', 'Sheviit', 'Terumot', 'Maasrot', 'Maaser Sheni', 'Challah', 'Orlah', 'Bikkurim'],
+            'Moed': ['Shabbat', 'Eruvin', 'Pesachim', 'Shekalim', 'Yoma', 'Sukkah', 'Beitzah', 'Rosh Hashanah', 'Taanit', 'Megillah', 'Moed Katan', 'Chagigah'],
+            'Nashim': ['Yevamot', 'Ketubot', 'Nedarim', 'Nazir', 'Sotah', 'Gittin', 'Kiddushin'],
+            'Nezikin': ['Bava Kamma', 'Bava Metzia', 'Bava Batra', 'Sanhedrin', 'Makkot', 'Shevuot', 'Eduyot', 'Avodah Zarah', 'Pirkei Avot', 'Horayot'],
+            'Kodshim': ['Zevachim', 'Menachot', 'Chullin', 'Bekhorot', 'Arakhin', 'Temurah', 'Keritot', 'Meilah', 'Tamid', 'Middot', 'Kinnim'],
+            'Taharot': ['Kelim', 'Oholot', 'Negaim', 'Parah', 'Tahorot', 'Mikvaot', 'Niddah', 'Makhshirin', 'Zavim', 'Tevul Yom', 'Yadayim', 'Oktzin']
         };
 
-                 for (const groupName in tractateGroups) {
-                const group = document.createElement('div');
-                group.classList.add('group');
-                const title = document.createElement('div');
-                title.classList.add('group-title');
-                title.textContent = groupName;
-                group.appendChild(title);
-                const list = document.createElement('ul');
-                list.classList.add('tractate-list');
-                tractateGroups[groupName].forEach(tractate => {
-                    const item = document.createElement('li');
-                    item.classList.add('tractate-item');
-                    item.textContent = tractate;
-                    item.addEventListener('click', () => {
-                        const allItems = document.querySelectorAll('.tractate-item');
-                        allItems.forEach(el => el.classList.remove('selected'));
-                        item.classList.add('selected');
-                        showResultsForTractate(tractate);
-                    });
-                    list.appendChild(item);
-                });
-                group.appendChild(list);
-                document.querySelector('.container').appendChild(group);
-            }
-            function fetch_data() {
-                fetch("/mish_db.json") // Corrected path!
-                    .then((res) => {
-                        if (!res.ok) {
-                            throw new Error(`HTTP error! Status: ${res.status}`);
-                        }
-                        return res.json();
-                    })
-                    .then((data) => {
-                        window.mishData = data;
-                        console.log('mish_db loaded');
-                        setupKeyboardHandlers();
-                    })
-                    .catch((error) => console.error("Unable to fetch data:", error));
-            }
-            function setupKeyboardHandlers() {
-                document.querySelectorAll('.key').forEach(key => {
-                    key.addEventListener('click', () => {
-                        document.querySelectorAll('.key').forEach(k => {
-                            k.classList.remove('selected');
-                        });
-                        key.classList.add('selected');
-                        showResults(key.textContent);
-                    });
-                });
-            }
+        // Dynamically create the HTML structure for each group of tractates
+        for (const groupName in tractateGroups) {
+            // Create a container for each group (e.g., Zeraim, Moed, etc.)
+            const group = document.createElement('div');
+            group.classList.add('group');
 
-            function showResults(letter) {
-                const results = [];
+            // Add a title for the group (e.g., "Zeraim")
+            const title = document.createElement('div');
+            title.classList.add('group-title');
+            title.textContent = groupName;
+            group.appendChild(title);
 
-                if (window.mishData && window.mishData.hasOwnProperty(letter)) {
+            // Create a list of tractates for the group
+            const list = document.createElement('ul');
+            list.classList.add('tractate-list');
+
+            // Loop through each tractate in the group and create a list item
+            tractateGroups[groupName].forEach(tractate => {
+                const item = document.createElement('li');
+                item.classList.add('tractate-item');
+                item.textContent = tractate;
+
+                // Add a click event listener to each tractate item
+                item.addEventListener('click', () => {
+                    // Deselect all other tractate items
+                    const allItems = document.querySelectorAll('.tractate-item');
+                    allItems.forEach(el => el.classList.remove('selected'));
+
+                    // Select the clicked tractate item
+                    item.classList.add('selected');
+
+                    // Show the results for the selected tractate
+                    showResultsForTractate(tractate);
+                });
+
+                // Add the tractate item to the list
+                list.appendChild(item);
+            });
+
+            // Add the list to the group container
+            group.appendChild(list);
+
+            // Add the group container to the main container
+            document.querySelector('.container').appendChild(group);
+        }
+
+        // Fetch the Mishnayot data from the JSON file
+        function fetch_data() {
+            fetch("/mish_db.json") // Corrected path to the JSON file
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! Status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    // Store the fetched data in a global variable for easy access
+                    window.mishData = data;
+                    console.log('mish_db loaded');
+
+                    // Set up keyboard handlers (if any) after the data is loaded
+                    setupKeyboardHandlers();
+                })
+                .catch((error) => console.error("Unable to fetch data:", error));
+        }
+
+        // Set up keyboard handlers (if needed)
+        function setupKeyboardHandlers() {
+            document.querySelectorAll('.key').forEach(key => {
+                key.addEventListener('click', () => {
+                    // Deselect all other keys
+                    document.querySelectorAll('.key').forEach(k => {
+                        k.classList.remove('selected');
+                    });
+
+                    // Select the clicked key
+                    key.classList.add('selected');
+
+                    // Show results based on the selected key (e.g., a letter)
+                });
+            });
+        }
+
+        // Show results based on the selected tractate
+        function showResultsForTractate(tractateName) {
+            const results = [];
+
+            // Check if the Mishnayot data is available
+            if (window.mishData) {
+                // Loop through each letter in the Mishnayot data
+                for (const letter in window.mishData) {
                     const letterData = window.mishData[letter];
 
-                    for (const tractateName in letterData) {
-                        if (letterData.hasOwnProperty(tractateName)) {
-                            results.push(...letterData[tractateName].map(mishna => ({ tractate: tractateName, mishna: mishna })));
-                        }
+                    // Check if the selected tractate exists in the letter's data
+                    if (letterData.hasOwnProperty(tractateName)) {
+                        // Add each Mishna to the results array
+                        letterData[tractateName].forEach(mishna => {
+                            results.push({ letter: letter, tractate: tractateName, mishna: mishna });
+                        });                    
                     }
                 }
-                displayResults(results);
             }
 
-            function showResultsForTractate(tractateName) {
-                const results = [];
-                if (window.mishData) {
-                    for (const letter in window.mishData) {
-                        const letterData = window.mishData[letter];
-                        if (letterData.hasOwnProperty(tractateName)) {
-                            results.push(...letterData[tractateName].map(mishna => ({ tractate: tractateName, mishna: mishna })));
-                        }
-                    }
-                }
+            // Display the results
+            displayResults(results);
+        }
 
-                displayResults(results);
+        // Display the results in the results div
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Clear previous results
+
+            // If no results are found, display a message
+            if (results.length === 0) {
+                resultsDiv.textContent = "No results found.";
+                return;
             }
 
-            function displayResults(results) {
-                const resultsDiv = document.getElementById('results');
-                resultsDiv.innerHTML = '';
+            // Create a list to display the results
+            const ul = document.createElement('ul');
+            results.forEach(result => {
+                const li = document.createElement('li');
+                // Format: letter : tractate - mishna
+                li.textContent = `${result.letter} : ${result.tractate} - ${result.mishna}`; 
+                ul.appendChild(li);
+            });
+            resultsDiv.appendChild(ul);
+        }
 
-                if (results.length === 0) {
-                    resultsDiv.textContent = "No results found.";
-                    return;
-                }
-
-                const ul = document.createElement('ul');
-                results.forEach(result => {
-                    const li = document.createElement('li');
-                    li.textContent = `${result.tractate} - ${result.mishna}`;
-                    ul.appendChild(li);
-                });
-                resultsDiv.appendChild(ul);
-            }
-
-            fetch_data(); 
-        </script>
-        <div id="results"></div>
+        // Fetch the data when the page loads
+        fetch_data();
+    </script>
+    <div id="results"></div> 
     </div>
 
 </body>
+</html>
