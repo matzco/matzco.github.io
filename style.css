@@ -103,9 +103,6 @@ nav ul.nav-links li a:hover {
     border-radius: 5px;
     text-align: right;
 }
-#results {
-    margin: 20px;
-}
 
 .tractate {
     margin-bottom: 20px;
@@ -127,8 +124,6 @@ nav ul.nav-links li a:hover {
     background-color: #007BFF;
     color: white;
 }
-
-/*New*/
 
 .container {
     display: flex;
@@ -159,8 +154,29 @@ nav ul.nav-links li a:hover {
     cursor: pointer;
   }
   .tractate-item:hover {
-    background-color: #f0f0f0; /* Highlight on hover */
+    background-color: #f0f0f0; 
   }
   .tractate-item.selected {
-    background-color: lightblue; /* Highlight selected item */
+    background-color: lightblue; 
+  }
+  
+  #results {
+    margin-top: 30px; 
+    width: 85%; 
+    columns: 6;
+    column-gap: 20px;
+  }
+  
+  #results ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #results li {
+    margin-bottom: 5px;
+  }
+
+  #results li::first-letter {
+    font-weight: bold;
   }
