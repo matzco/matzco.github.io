@@ -1,5 +1,5 @@
 # BY NAME
-ben and bat keys
+ben and bat keys - add a space and cursor after
 refactor to not use internal .json copy
 results should use 'by masechta' format
 sefaria source sheet generation
