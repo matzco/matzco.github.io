@@ -93,6 +93,24 @@
         });
         }
 
+        // Sofit letter handler
+        function convertSofit(letter) {
+            switch (letter) {
+                case 'ך':
+                return 'כ';
+                case 'ם':
+                return 'מ';
+                case 'ן':
+                return 'נ';
+                case 'ף':
+                return 'פ';
+                case 'ץ':
+                return 'צ';
+                default:
+                return letter;
+            }
+        }
+
         // Display mishnah references for selected letter
         function showResults(letter) {
         // Remove previous results if they exist
@@ -103,13 +121,10 @@
         const results = document.createElement('div');
         results.id = 'results';
 
-        // Get data for selected letter from JSON
-
         // Sofit letters
-        if (letter == 'ם') {
-            letter = 'מ'
-        }
-
+        letter = convertSofit(letter)
+        
+        // Get data for selected letter from JSON
         const letterData = window.mishData[letter];
         if (!letterData) return;
 
