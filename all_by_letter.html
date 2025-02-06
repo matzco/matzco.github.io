@@ -9,7 +9,7 @@
    <header>
         <nav>
             <ul class="nav-links">
-                <li><a href="test_mish.html">Search by Name</a></li>
+                <li><a href="index.html">Search by Name</a></li>
                 <li><a href="all_by_letter.html">Mishnayot by Letter</a></li>
                 <li><a href="all_by_masechta.html">Mishnayot by Masechta</a></li>
             </ul>
@@ -104,6 +104,12 @@
         results.id = 'results';
 
         // Get data for selected letter from JSON
+
+        // Sofit letters
+        if (letter == 'ם') {
+            letter = 'מ'
+        }
+
         const letterData = window.mishData[letter];
         if (!letterData) return;
 
