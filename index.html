@@ -8,7 +8,7 @@
     <header>
         <nav>
             <ul class="nav-links">
-                <li><a href="test_mish.html">Search by Name</a></li>
+                <li><a href="index.html">Search by Name</a></li>
                 <li><a href="all_by_letter.html">Mishnayot by Letter</a></li>
                 <li><a href="all_by_masechta.html">Mishnayot by Masechta</a></li>
             </ul>
@@ -54,6 +54,9 @@
             <span class="key special-key">Space</span>
             <span class="key special-key">Enter</span>
             <span class="key special-key">Backspace</span>
+            <span class="key special-key">Clear</span>
+            <span class="key special-key">בת</span>
+            <span class="key special-key">בן</span>
         </div>
     </div>
 
@@ -6043,6 +6046,10 @@
                                 input.selectionEnd = cursorPos - 1;
                             }
                             break;
+                        case 'Clear':
+                          input.value = ''
+                          break;
+                          
                         default:
                             input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
                             input.selectionStart = cursorPos + 1;
