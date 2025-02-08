@@ -134,6 +134,7 @@
         const results = [];
         if (window.mishData) {
             const letterData = window.mishData[letter];
+            console.log(window.mishData)
             console.log('Fetched ' + letterData.length + 'results for ' + letter);
             return letterData;
         }
@@ -203,11 +204,11 @@
         })
       }
 
+      // Also clear input on return?
       function goBack() {
-          document.getElementById('resultPage').style.display = 'none';
-          document.getElementById('keyboardPage').style.display = 'block';
-          input.value = ''
-        }
+        document.getElementById('resultPage').style.display = 'none';
+        document.getElementById('keyboardPage').style.display = 'block';
+      }
 
       document.addEventListener('DOMContentLoaded', function() {
         fetch_data();
