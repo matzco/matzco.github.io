@@ -89,6 +89,7 @@
       }
 
       function setupKeyboardHandlers() {
+        console.log('Called setupKeyboardHandlers');
         document.addEventListener('DOMContentLoaded', function() {
           const input = document.getElementById('nameInput'); 
           const keys = document.querySelectorAll('.key');
@@ -97,7 +98,7 @@
               key.addEventListener('click', function() {
                   const keyValue = this.textContent;
                   const cursorPos = input.selectionStart; 
-
+                  console.log('Listening for clicks')
                   switch(keyValue) {
                       case 'Space':
                           input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
