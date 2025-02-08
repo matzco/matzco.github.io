@@ -83,10 +83,6 @@
           .catch((error) => console.error("Unable to fetch data:", error));
       }
 
-      function clearInput() {
-        input.value = ''
-      }
-
       function setupKeyboardHandlers() {
         console.log('Called setupKeyboardHandlers');
         const input = document.getElementById('nameInput'); 
@@ -115,7 +111,7 @@
                       }
                       break;
                   case 'Clear':
-                      clearInput();
+                      input.value = ''
                       break;
                   default:
                       input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
@@ -210,7 +206,7 @@
       function goBack() {
           document.getElementById('resultPage').style.display = 'none';
           document.getElementById('keyboardPage').style.display = 'block';
-          clearInput()
+          input.value = ''
         }
 
       document.addEventListener('DOMContentLoaded', function() {
