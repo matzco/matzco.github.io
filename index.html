@@ -92,7 +92,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById('nameInput');
             const keys = document.querySelectorAll('.key');
-
+            console.log('Setting up keyboard functions.')
             keys.forEach(key => {
                 key.addEventListener('click', function() {
                     const keyValue = this.textContent;

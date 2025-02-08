@@ -63,7 +63,7 @@ nav ul.nav-links li a:hover {
     min-height: 50px;
 }
 .special-key {
-    width: 80px !important;
+    width: 80px;
 }
 #resultPage {
     display: none;
