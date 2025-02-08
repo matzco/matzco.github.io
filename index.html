@@ -90,49 +90,49 @@
 
       function setupKeyboardHandlers() {
         document.addEventListener('DOMContentLoaded', function() {
-            const input = document.getElementById('nameInput');
-            const keys = document.querySelectorAll('.key');
-            console.log('Setting up keyboard functions.')
-            keys.forEach(key => {
-                key.addEventListener('click', function() {
-                    const keyValue = this.textContent;
-                    const cursorPos = input.selectionStart;
-                    
-                    switch(keyValue) {
-                        case 'Space':
-                            input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
-                            input.selectionStart = cursorPos + 1;
-                            input.selectionEnd = cursorPos + 1;
-                            break;
-                        case 'Enter':
-                            processName(input.value);
-                            break;
-                        case 'Backspace':
-                            if (cursorPos > 0) {
-                                input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
-                                input.selectionStart = cursorPos - 1;
-                                input.selectionEnd = cursorPos - 1;
-                            }
-                            break;
-                        case 'Clear':
-                          clearInput()
+          const input = document.getElementById('nameInput'); 
+          const keys = document.querySelectorAll('.key');
+          console.log('Setting up keyboard functions.')
+          keys.forEach(key => {
+              key.addEventListener('click', function() {
+                  const keyValue = this.textContent;
+                  const cursorPos = input.selectionStart; 
+
+                  switch(keyValue) {
+                      case 'Space':
+                          input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
+                          input.selectionStart = cursorPos + 1;
+                          input.selectionEnd = cursorPos + 1;
                           break;
-                        default:
-                            input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
-                            input.selectionStart = cursorPos + 1;
-                            input.selectionEnd = cursorPos + 1;
-                    }
-                    input.focus();
-                });
-            });
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace') {
-                    return;
-                }
-                e.preventDefault();
-            });
-        });
-      }
+                      case 'Enter':
+                          processName(input.value);
+                          break;
+                      case 'Backspace':
+                          if (cursorPos > 0) {
+                              input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
+                              input.selectionStart = cursorPos - 1;
+                              input.selectionEnd = cursorPos - 1;
+                          }
+                          break;
+                      case 'Clear':
+                          clearInput();
+                          break;
+                      default:
+                          input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
+                          input.selectionStart = cursorPos + 1;
+                          input.selectionEnd = cursorPos + 1;
+                  }
+                  input.focus();
+              });
+          });
+          input.addEventListener('keydown', function(e) {
+              if (e.key === 'Backspace') {
+                  return;
+              }
+              e.preventDefault();
+          });
+      });
+    }
 
       // Returns all mishnayot for a letter
       function getMishnayot (letter) {
