@@ -1,7 +1,6 @@
 # BY NAME
 ben and bat keys - add a space and cursor after
-refactor to not use internal .json copy
-results should use 'by masechta' format
+results should use 'by letter' format for each letter of name
 sefaria source sheet generation
 
 # BY LETTER
