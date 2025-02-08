@@ -67,7 +67,6 @@
     </div>
 
     <script>
-
       function fetch_data() {
         fetch("./mish_db.json")
             .then((res) => {
@@ -79,7 +78,7 @@
             .then((data) => {
                 // Store JSON data globally for access across functions
                 window.mishData = data;
-                console.log('mish_db loaded');
+                console.log('mish_db loaded successfully.');
                 setupKeyboardHandlers();
             })
             .catch((error) => console.error("Unable to fetch data:", error));
@@ -150,7 +149,6 @@
       }
 
       function processName(name) {
-
           // Change sofit letters
           name = convertSofit(name)
           
@@ -170,7 +168,7 @@
               results.push({letter, references: refs});
             }
           }
-
+          console.log('Processed name, got results:' + refs.length);
           showResults(name, results);
       }
 
@@ -206,7 +204,6 @@
           resultDiv.appendChild(letterLabel);
           resultDiv.appendChild(refsContainer);
           container.appendChild(resultDiv);
-
         })
       }
 
@@ -215,6 +212,8 @@
           document.getElementById('keyboardPage').style.display = 'block';
           clearInput()
         }
+
+      fetch_data()
     </script>
   </body>
 </html>
