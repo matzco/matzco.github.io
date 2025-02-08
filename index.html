@@ -69,19 +69,18 @@
     <script>
       function fetch_data() {
         fetch("./mish_db.json")
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then((data) => {
-                // Store JSON data globally for access across functions
-                window.mishData = data;
-                console.log('mish_db loaded successfully.');
-                setupKeyboardHandlers();
-            })
-            .catch((error) => console.error("Unable to fetch data:", error));
+          .then((res) => {
+              if (!res.ok) {
+                  throw new Error(`HTTP error! Status: ${res.status}`);
+              }
+              return res.json();
+          })
+          .then((data) => {
+              window.mishData = data;
+              console.log('mish_db loaded successfully.');
+              setupKeyboardHandlers(); 
+          })
+          .catch((error) => console.error("Unable to fetch data:", error));
       }
 
       function clearInput() {
