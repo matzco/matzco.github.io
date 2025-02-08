@@ -89,49 +89,48 @@
 
       function setupKeyboardHandlers() {
         console.log('Called setupKeyboardHandlers');
-        document.addEventListener('DOMContentLoaded', function() {
-          const input = document.getElementById('nameInput'); 
-          const keys = document.querySelectorAll('.key');
-          console.log('Setting up keyboard functions.')
-          keys.forEach(key => {
-              key.addEventListener('click', function() {
-                  const keyValue = this.textContent;
-                  const cursorPos = input.selectionStart; 
-                  console.log('Listening for clicks')
-                  switch(keyValue) {
-                      case 'Space':
-                          input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
-                          input.selectionStart = cursorPos + 1;
-                          input.selectionEnd = cursorPos + 1;
-                          break;
-                      case 'Enter':
-                          processName(input.value);
-                          break;
-                      case 'Backspace':
-                          if (cursorPos > 0) {
-                              input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
-                              input.selectionStart = cursorPos - 1;
-                              input.selectionEnd = cursorPos - 1;
-                          }
-                          break;
-                      case 'Clear':
-                          clearInput();
-                          break;
-                      default:
-                          input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
-                          input.selectionStart = cursorPos + 1;
-                          input.selectionEnd = cursorPos + 1;
-                  }
-                  input.focus();
-              });
-          });
-          input.addEventListener('keydown', function(e) {
-              if (e.key === 'Backspace') {
-                  return;
+        const input = document.getElementById('nameInput'); 
+        const keys = document.querySelectorAll('.key');
+        
+        keys.forEach(key => {
+            key.addEventListener('click', function() {
+              const keyValue = this.textContent;
+              const cursorPos = input.selectionStart; 
+              console.log('Setting up keyboard functions.')
+              switch(keyValue) {
+                
+                  case 'Space':
+                      input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
+                      input.selectionStart = cursorPos + 1;
+                      input.selectionEnd = cursorPos + 1;
+                      break;
+                  case 'Enter':
+                      processName(input.value);
+                      break;
+                  case 'Backspace':
+                      if (cursorPos > 0) {
+                          input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
+                          input.selectionStart = cursorPos - 1;
+                          input.selectionEnd = cursorPos - 1;
+                      }
+                      break;
+                  case 'Clear':
+                      clearInput();
+                      break;
+                  default:
+                      input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
+                      input.selectionStart = cursorPos + 1;
+                      input.selectionEnd = cursorPos + 1;
               }
-              e.preventDefault();
+              input.focus();
           });
-      });
+        });
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace') {
+                return;
+            }
+            e.preventDefault();
+        });
     }
 
       // Returns all mishnayot for a letter
@@ -213,7 +212,10 @@
           clearInput()
         }
 
-      fetch_data()
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch_data();
+      });
+
     </script>
   </body>
 </html>
