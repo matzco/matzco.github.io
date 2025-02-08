@@ -165,9 +165,10 @@
             const refs = getMishnayot(letter);
             if (refs.length > 0) {
               results.push({letter, references: refs});
+              console.log('Processed name, got results:' + refs.length);
             }
           }
-          console.log('Processed name, got results:' + refs.length);
+          
           showResults(name, results);
       }
 
