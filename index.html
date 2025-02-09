@@ -134,7 +134,6 @@
         const results = [];
         if (window.mishData) {
             const letterData = window.mishData[letter];
-            console.log(window.mishData)
             console.log('Fetched ' + letterData.length + 'results for ' + letter);
             return letterData;
         }
@@ -159,10 +158,12 @@
           const results = [];
           for (let letter of name) {
             // Dupe letters? fine for now
-            const refs = getMishnayot(letter);
-            if (refs.length > 0) {
+            const letterData = getMishnayot(letter);
+            if (letterData.length > 0) {
               results.push({letter, references: refs});
-              console.log('Processed name, got results:' + refs.length);
+              console.log('Processed name, got results:' + letterData.length);
+            } else {
+              console.log('letterData is empty for ' + letter)
             }
           }
           
