@@ -78,6 +78,7 @@
           .then((data) => {
               window.mishData = data;
               console.log('mish_db loaded successfully.');
+              console.log(window.mishData);
               setupKeyboardHandlers(); 
           })
           .catch((error) => console.error("Unable to fetch data:", error));
@@ -92,7 +93,6 @@
             key.addEventListener('click', function() {
               const keyValue = this.textContent;
               const cursorPos = input.selectionStart; 
-              console.log('Setting up keyboard functions.')
               switch(keyValue) {
                 
                   case 'Space':
@@ -101,6 +101,7 @@
                       input.selectionEnd = cursorPos + 1;
                       break;
                   case 'Enter':
+                      console.log('Calling processName, Enter pressed')
                       processName(input.value);
                       break;
                   case 'Backspace':
@@ -134,7 +135,7 @@
         const results = [];
         if (window.mishData) {
             const letterData = window.mishData[letter];
-            console.log('Fetched ' + letterData.length + 'results for ' + letter);
+            console.log('Fetched ' + letterData + 'results for ' + letter);
             return letterData;
         }
       }
@@ -166,7 +167,7 @@
               console.log('letterData is empty for ' + letter)
             }
           }
-          
+          console.log('Processed ' + name + ', got ' + results)
           showResults(name, results);
       }
 

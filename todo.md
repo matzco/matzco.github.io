@@ -2,6 +2,7 @@
 ben and bat keys - add a space and cursor after
 results should use 'by letter' format for each letter of name
 sefaria source sheet generation
+link the space key to space
 
 # BY LETTER
 change results div to byletter specific
