@@ -135,7 +135,7 @@
         const results = [];
         if (window.mishData) {
             const letterData = window.mishData[letter];
-            console.log('Fetched ' + letterData + 'results for ' + letter);
+            console.log('Fetched ' + Object.entries(letterData) + 'results for ' + letter);
             return letterData;
         }
       }
