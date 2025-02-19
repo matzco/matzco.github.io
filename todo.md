@@ -1,8 +1,10 @@
 # BY NAME
 ben and bat keys - add a space and cursor after
-results should use 'by letter' format for each letter of name
 sefaria source sheet generation
 link the space key to space
+format letters to columns
+each mishna has a tick box, once a column is ticked, add mishna to list
+export to sefaria source sheet
 
 # BY LETTER
 change results div to byletter specific

@@ -103,7 +103,9 @@
                       break;
                   case 'Enter':
                       console.log('Calling processName, Enter pressed')
-                      processName(input.value);
+                      const name = input.value;
+                      input.value = ''
+                      processName(name);
                       break;
                   case 'Backspace':
                       if (cursorPos > 0) {
