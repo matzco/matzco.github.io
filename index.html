@@ -146,29 +146,17 @@
       }
 
       function processName(name) {
-          // Change sofit letters
           name = convertSofit(name)
-          
-          const letterCounts = {};
-          name.split('').forEach(letter => {
-              if (letter !== ' ' && letter !== '\n') {
-                  letterCounts[letter] = (letterCounts[letter] || 0) + 1;
-              }
-          });
-          
-          // For each letter in the name, get the list of masechtot/mishna
-          const results = [];
-          for (let letter of name) {
-            // Dupe letters? fine for now
-            const letterData = getMishnayot(letter);
-            if (letterData.length > 0) {
-              results.push({letter, references: refs});
-              console.log('Processed name, got results:' + letterData.length);
+          let results = new Map()
+          for (letter of name) {
+            const letterData = window.mishData[letter]
+            if (letterData) {
+              results.set(letter, letterData);
+              console.log('Processed letter, got results:' + letter + JSON.stringify(letterData));
             } else {
               console.log('letterData is empty for ' + letter)
             }
           }
-          console.log('Processed ' + name + ', got ' + results)
           showResults(name, results);
       }
 
@@ -180,31 +168,36 @@
         //Build page
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
-        if (results.length == 0) {
+        if (!results) {
           container.textContent = "No results found.";
           return;
         }
-        results.forEach(result => {
-          const resultDiv = document.createElement('div');
-          resultDiv.className = 'letter-result';
-          
-          const letterLabel = document.createElement('div');
-          letterLabel.className = 'letter-label'
-          letterLabel.textContent = `${result.letter}`;
-          
-          const refsContainer = document.createElement('div');
-          refsContainer.className = 'multiple-refs';
 
-          result.references.forEach((ref) => {
-            const mishnaRef = document.createElement('div');
-            mishnaRef.className = 'mishnaRef';
-            mishnaRef.innerHTML = `<span class="tractate">${ref.tractate}</span> ${ref.reference}`;
-            refsContainer.appendChild(mishnaRef)
-          });
-          resultDiv.appendChild(letterLabel);
-          resultDiv.appendChild(refsContainer);
-          container.appendChild(resultDiv);
-        })
+        for (letter of name) {
+          const mishnayot = results.get(letter);
+          for (const [tractate, entries] of Object.entries(mishnayot)) {
+
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'letter-result';
+            
+            const letterLabel = document.createElement('div');
+            letterLabel.className = 'letter-label'
+            letterLabel.textContent = `${letter}`;
+            
+            const refsContainer = document.createElement('div');
+            refsContainer.className = 'multiple-refs';
+
+            entries.forEach((entry) => {
+              const mishnaRef = document.createElement('div');
+              mishnaRef.className = 'mishnaRef';
+              mishnaRef.innerHTML = `<span class="tractate">${tractate}</span> ${entry}`;
+              refsContainer.appendChild(mishnaRef)
+            });
+            resultDiv.appendChild(letterLabel);
+            resultDiv.appendChild(refsContainer);
+            container.appendChild(resultDiv);
+          }
+        }
       }
 
       // Also clear input on return?
