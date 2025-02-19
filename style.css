@@ -180,3 +180,9 @@ nav ul.nav-links li a:hover {
   #results li::first-letter {
     font-weight: bold;
   }
+
+  #resultsContainer {
+    display: flex; 
+    gap: 20px;      
+    direction: rtl;
+  }

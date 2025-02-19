@@ -79,7 +79,6 @@
           .then((data) => {
               window.mishData = data;
               console.log('mish_db loaded successfully.');
-              console.log(window.mishData);
               setupKeyboardHandlers(); 
           })
           .catch((error) => console.error("Unable to fetch data:", error));
@@ -102,11 +101,10 @@
                       input.selectionEnd = cursorPos + 1;
                       break;
                   case 'Enter':
-                      console.log('Calling processName, Enter pressed')
-                      const name = input.value;
-                      input.value = ''
-                      processName(name);
-                      break;
+                    const name  = input.value;
+                    input.value = '';
+                    processName(name);
+                    break;
                   case 'Backspace':
                       if (cursorPos > 0) {
                           input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
@@ -131,16 +129,6 @@
             }
             e.preventDefault();
         });
-    }
-
-      // Returns all mishnayot for a letter
-      function getMishnayot (letter) {
-        const results = [];
-        if (window.mishData) {
-            const letterData = window.mishData[letter];
-            console.log('Fetched ' + Object.entries(letterData) + 'results for ' + letter);
-            return letterData;
-        }
       }
 
       function convertSofit (name) {
@@ -148,18 +136,25 @@
       }
 
       function processName(name) {
-          name = convertSofit(name)
-          let results = new Map()
-          for (letter of name) {
-            const letterData = window.mishData[letter]
-            if (letterData) {
-              results.set(letter, letterData);
-              console.log('Processed letter, got results:' + letter + JSON.stringify(letterData));
-            } else {
-              console.log('letterData is empty for ' + letter)
-            }
+        if (!window.mishData) {
+          console.log('Data was not loaded correctly.');
+          return;
+        }
+        name = convertSofit(name)
+        let results = new Map()
+        for (letter of name) {
+          if (results.has(letter)) {
+            continue;
           }
-          showResults(name, results);
+          const letterData = window.mishData[letter]
+          if (letterData) {
+            results.set(letter, letterData);
+            console.log('Found data for letter', letter);
+          } else {
+            console.log('letterData is empty for ' + letter)
+          }
+        }
+        showResults(name, results);
       }
 
       function showResults(name, results) {
@@ -169,6 +164,7 @@
         document.getElementById('resultPage').style.display = 'block';
         //Build page
         const container = document.getElementById('resultsContainer');
+
         container.innerHTML = '';
         if (!results) {
           container.textContent = "No results found.";
@@ -176,37 +172,36 @@
         }
 
         for (letter of name) {
+          console.log('Building div for letter', letter)
+          if (letter == ' ') {
+            continue;
+          }
           const mishnayot = results.get(letter);
+          const resultDiv = document.createElement('div');
+          resultDiv.className = 'letter-result';
+
+          const letterLabel = document.createElement('h3')
+          letterLabel.className = 'letter-label'
+          letterLabel.textContent = `${letter}`;
+          
+          resultDiv.appendChild(letterLabel);
+
           for (const [tractate, entries] of Object.entries(mishnayot)) {
-
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'letter-result';
-            
-            const letterLabel = document.createElement('div');
-            letterLabel.className = 'letter-label'
-            letterLabel.textContent = `${letter}`;
-            
-            const refsContainer = document.createElement('div');
-            refsContainer.className = 'multiple-refs';
-
             entries.forEach((entry) => {
               const mishnaRef = document.createElement('div');
               mishnaRef.className = 'mishnaRef';
               mishnaRef.innerHTML = `<span class="tractate">${tractate}</span> ${entry}`;
-              refsContainer.appendChild(mishnaRef)
+              resultDiv.appendChild(mishnaRef)
             });
-            resultDiv.appendChild(letterLabel);
-            resultDiv.appendChild(refsContainer);
+            
             container.appendChild(resultDiv);
           }
         }
       }
 
-      // Also clear input on return?
       function goBack() {
         document.getElementById('resultPage').style.display = 'none';
         document.getElementById('keyboardPage').style.display = 'block';
-        document.getElementById('nameInput').textContent = '';
       }
 
       document.addEventListener('DOMContentLoaded', function() {

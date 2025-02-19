@@ -1,8 +1,7 @@
 # BY NAME
 ben and bat keys - add a space and cursor after
 sefaria source sheet generation
-link the space key to space
-format letters to columns
+space, del keys
 each mishna has a tick box, once a column is ticked, add mishna to list
 export to sefaria source sheet
 
