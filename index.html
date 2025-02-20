@@ -247,7 +247,7 @@
         const perekMishna = code[2].split(":")
         const sefariaString = 'Mishnah ' + code[1] + ' ' + perekMishna[0];
         console.log('perek', perekMishna)
-        const link = "http://www.sefaria.org/api/texts/" + sefariaString;
+        const link = "https://www.sefaria.org/api/texts/" + sefariaString;
         console.log(link)
         getMishna(link, perekMishna[1])
       }
