@@ -65,7 +65,7 @@
         <h2>Mishnah References for: <span id="displayedName"></span></h2>
         <div id="resultsContainer"></div>
         <button onclick="goBack()" class="special-key">Back to Keyboard</button>
-        <button onclick="genSefaria()" class="special-key">Generate Sefaria Source Sheet</button>
+        <button onclick="genSelecteds()" class="special-key">Generate Sefaria Source Sheet</button>
     </div>
 
     <script>
@@ -103,6 +103,7 @@
                       break;
                   case 'Enter':
                     const name  = input.value;
+                    window.name = name;
                     input.value = '';
                     processName(name);
                     break;
@@ -173,7 +174,8 @@
           return;
         }
 
-        for (letter of name) {
+        for (let i = 0; i < name.length; i++) {
+          const letter = name[i]
           console.log('Building div for letter', letter)
 
           if (letter == ' ') {
@@ -197,7 +199,7 @@
               const button = document.createElement('input');
               button.type = 'radio';
               button.id = `${letter}-${tractate}-${entry}`;
-              button.name = `${letter}`; 
+              button.name = `${letter}-${i}`; 
 
               const buttonLabel = document.createElement('label')
               buttonLabel.textContent = `${tractate} ${entry}`
@@ -210,17 +212,65 @@
           }
           container.appendChild(resultDiv); 
         }
-        }
+      }
 
       function goBack() {
         document.getElementById('resultPage').style.display = 'none';
         document.getElementById('keyboardPage').style.display = 'block';
       }
 
-      function genSefaria() {
-        alert('working on it')
+      function genSelecteds() {
+        const selectedButtonsList = document.querySelectorAll(`input:checked`)
+        if (selectedButtonsList.length != window.name.length) {
+          alert('Please select a Mishna for each letter.')
+          console.log('selected',selectedButtonsList.length, 'name.length is',window.name.length)
+        } else {
+          const selectedButtons = Array.from(selectedButtonsList);
+          console.log('selected', selectedButtons.length, 'items',  selectedButtons)
+          genSefaria(selectedButtons)
+        }
       }
 
+      function genSefaria(selecteds) {
+        for (mish of selecteds) {
+          sefariaLink(mish)
+        }
+      }
+
+      function sefariaLink(mishna) {
+        let code = mishna.id.split("-") 
+        // ד-Kilayim-3:7
+        
+        if (code[1]) {
+          //some masechtot need extra processing
+        }
+        const perekMishna = code[2].split(":")
+        const sefariaString = 'Mishnah ' + code[1] + ' ' + perekMishna[0];
+        console.log('perek', perekMishna)
+        const link = "http://www.sefaria.org/api/texts/" + sefariaString;
+        console.log(link)
+        getMishna(link, perekMishna[1])
+      }
+
+      async function getMishna(link, number) {
+        try {
+          const response = await fetch(link);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status ${response.status}`)
+          }
+
+          const data = await response.json();
+
+          //Validate response page
+
+          const mishna = data.he[number-1];
+          console.log(mishna)
+
+      } catch (error) {
+        console.error('Error', error);
+        return null;
+      }
+    }
       document.addEventListener('DOMContentLoaded', function() {
         fetch_data();
       });
