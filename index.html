@@ -65,6 +65,7 @@
         <h2>Mishnah References for: <span id="displayedName"></span></h2>
         <div id="resultsContainer"></div>
         <button onclick="goBack()" class="special-key">Back to Keyboard</button>
+        <button onclick="genSefaria()" class="special-key">Generate Sefaria Source Sheet</button>
     </div>
 
     <script>
@@ -124,9 +125,10 @@
           });
         });
         input.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace') {
-                return;
-            }
+          const allowedKeys = ['Backspace', ' ', 'ArrowLeft', 'ArrowRight'];
+          if (allowedKeys.includes(e.key)) {
+            return;
+          }
             e.preventDefault();
         });
       }
@@ -173,6 +175,7 @@
 
         for (letter of name) {
           console.log('Building div for letter', letter)
+
           if (letter == ' ') {
             continue;
           }
@@ -190,18 +193,32 @@
             entries.forEach((entry) => {
               const mishnaRef = document.createElement('div');
               mishnaRef.className = 'mishnaRef';
-              mishnaRef.innerHTML = `<span class="tractate">${tractate}</span> ${entry}`;
-              resultDiv.appendChild(mishnaRef)
-            });
-            
-            container.appendChild(resultDiv);
+
+              const button = document.createElement('input');
+              button.type = 'radio';
+              button.id = `${letter}-${tractate}-${entry}`;
+              button.name = `${letter}`; 
+
+              const buttonLabel = document.createElement('label')
+              buttonLabel.textContent = `${tractate} ${entry}`
+
+              mishnaRef.appendChild(button);
+              mishnaRef.appendChild(buttonLabel)
+              resultDiv.appendChild(mishnaRef);
+            })
+          
           }
+          container.appendChild(resultDiv); 
         }
-      }
+        }
 
       function goBack() {
         document.getElementById('resultPage').style.display = 'none';
         document.getElementById('keyboardPage').style.display = 'block';
+      }
+
+      function genSefaria() {
+        alert('working on it')
       }
 
       document.addEventListener('DOMContentLoaded', function() {

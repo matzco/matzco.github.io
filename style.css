@@ -185,4 +185,5 @@ nav ul.nav-links li a:hover {
     display: flex; 
     gap: 20px;      
     direction: rtl;
+    justify-content: flex-end;
   }
