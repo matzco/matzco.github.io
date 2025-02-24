@@ -95,34 +95,43 @@
               const keyValue = this.textContent;
               const cursorPos = input.selectionStart; 
               switch(keyValue) {
-                
-                  case 'Space':
-                      input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
-                      input.selectionStart = cursorPos + 1;
-                      input.selectionEnd = cursorPos + 1;
-                      break;
-                  case 'Enter':
-                    const name  = input.value;
-                    window.name = name;
-                    input.value = '';
-                    processName(name);
-                    break;
-                  case 'Backspace':
-                      if (cursorPos > 0) {
-                          input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
-                          input.selectionStart = cursorPos - 1;
-                          input.selectionEnd = cursorPos - 1;
-                      }
-                      break;
-                  case 'Clear':
-                      input.value = ''
-                      break;
-                  default:
-                      input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
-                      input.selectionStart = cursorPos + 1;
-                      input.selectionEnd = cursorPos + 1;
+                case 'Space':
+                  input.value = input.value.slice(0, cursorPos) + ' ' + input.value.slice(cursorPos);
+                  input.selectionStart = cursorPos + 1;
+                  input.selectionEnd = cursorPos + 1;
+                  break;
+                case 'Enter':
+                  const name  = input.value;
+                  window.name = name;
+                  input.value = '';
+                  processName(name);
+                  break;
+                case 'Backspace':
+                  if (cursorPos > 0) {
+                    input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
+                    input.selectionStart = cursorPos - 1;
+                    input.selectionEnd = cursorPos - 1;
+                  }
+                  break;
+                case 'Clear':
+                  input.value = ''
+                  break;
+                case 'בת':
+                  input.value = input.value.slice(0, cursorPos) + keyValue + ' ' + input.value.slice(cursorPos);
+                  input.selectionStart = cursorPos + keyValue.length + 1;
+                  input.selectionEnd = cursorPos + keyValue.length + 1;
+                  break;
+                case'בן':
+                  input.value = input.value.slice(0, cursorPos) + keyValue + ' ' + input.value.slice(cursorPos);
+                  input.selectionStart = cursorPos + keyValue.length + 1;
+                  input.selectionEnd = cursorPos + keyValue.length + 1;
+                  break;
+                default:
+                  input.value = input.value.slice(0, cursorPos) + keyValue + input.value.slice(cursorPos);
+                  input.selectionStart = cursorPos + 1;
+                  input.selectionEnd = cursorPos + 1;
               }
-              input.focus();
+            input.focus();
           });
         });
         input.addEventListener('keydown', function(e) {
@@ -203,6 +212,7 @@
 
               const buttonLabel = document.createElement('label')
               buttonLabel.textContent = `${tractate} ${entry}`
+              buttonLabel.htmlFor = `${letter}-${tractate}-${entry}`;
 
               mishnaRef.appendChild(button);
               mishnaRef.appendChild(buttonLabel)
@@ -221,59 +231,22 @@
 
       function genSelecteds() {
         const selectedButtonsList = document.querySelectorAll(`input:checked`)
-        if (selectedButtonsList.length != window.name.length) {
+        // Don't count whitespaces to name length
+        if (selectedButtonsList.length != window.name.replace(/\s+/g, '').length) {
           alert('Please select a Mishna for each letter.')
           console.log('selected',selectedButtonsList.length, 'name.length is',window.name.length)
         } else {
-          const selectedButtons = Array.from(selectedButtonsList);
-          console.log('selected', selectedButtons.length, 'items',  selectedButtons)
-          genSefaria(selectedButtons)
+          const selectedButtons = Array.from(selectedButtonsList).map(button => button.id)
+          console.log('selected', selectedButtons.length, 'items',  JSON.stringify(selectedButtons))
+          localStorage.setItem('mishnayot', JSON.stringify(selectedButtons));
+          console.log('put into local', localStorage.getItem('mishnayot'))
+          window.open('sourcesgenerator.html', '_self')
         }
       }
 
-      function genSefaria(selecteds) {
-        for (mish of selecteds) {
-          sefariaLink(mish)
-        }
-      }
-
-      function sefariaLink(mishna) {
-        let code = mishna.id.split("-") 
-        // ד-Kilayim-3:7
-        
-        if (code[1]) {
-          //some masechtot need extra processing
-        }
-        const perekMishna = code[2].split(":")
-        const sefariaString = 'Mishnah ' + code[1] + ' ' + perekMishna[0];
-        console.log('perek', perekMishna)
-        const link = "https://www.sefaria.org/api/texts/" + sefariaString;
-        console.log(link)
-        getMishna(link, perekMishna[1])
-      }
-
-      async function getMishna(link, number) {
-        try {
-          const response = await fetch(link);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status ${response.status}`)
-          }
-
-          const data = await response.json();
-
-          //Validate response page
-
-          const mishna = data.he[number-1];
-          console.log(mishna)
-
-      } catch (error) {
-        console.error('Error', error);
-        return null;
-      }
-    }
-      document.addEventListener('DOMContentLoaded', function() {
-        fetch_data();
-      });
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch_data();
+    });
 
     </script>
   </body>

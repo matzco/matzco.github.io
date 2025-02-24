@@ -1,9 +1,9 @@
 # BY NAME
 ben and bat keys - add a space and cursor after
-sefaria source sheet generation
-space, del keys
-each mishna has a tick box, once a column is ticked, add mishna to list
-export to sefaria source sheet
+
+error catching for loading from localStorage, for getting data from sefaria in getMishna
+divs to show
+downloadable
 
 # BY LETTER
 change results div to byletter specific
